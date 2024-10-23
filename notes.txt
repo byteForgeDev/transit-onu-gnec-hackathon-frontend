@@ -1,0 +1,4 @@
+
+-- NEW DEPENDENCIES
+
+npm install @react-google-maps/api@latest
