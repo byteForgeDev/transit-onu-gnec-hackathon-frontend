@@ -9,6 +9,8 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [country, setCountry] = useState('');
+  const [city, setCity] = useState('');
 
   const handleSignup = (e) => {
     e.preventDefault();
@@ -17,7 +19,7 @@ const Signup = () => {
       return;
     }
     // Add signup logic
-    console.log('Email:', email, 'Password:', password);
+    console.log('Email:', email, 'Password:', password, 'Country:', country, 'City:', city);
   };
 
   return (
@@ -74,6 +76,34 @@ const Signup = () => {
                 required
               />
             </div>
+            <div>
+              <label htmlFor="country" className="block text-sm text-gray-700">
+                Country
+              </label>
+              <input
+                type="text"
+                id="country"
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
+                placeholder="Enter your country"
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-secondaryInteractive"
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="city" className="block text-sm text-gray-700">
+                City
+              </label>
+              <input
+                type="text"
+                id="city"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                placeholder="Enter your city"
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-secondaryInteractive"
+                required
+              />
+            </div>
             <button
               type="submit"
               className="w-full bg-secondaryInteractive text-white py-2 rounded-lg hover:bg-green-700 transition"
@@ -83,8 +113,9 @@ const Signup = () => {
           </form>
 
           <div className="mt-6 flex justify-center">
-            <button className="w-full bg-white border border-secondaryInteractive py-2 rounded-lg hover:bg-green-100 flex items-center justify-center">
+            <button className="w-full bg-white border border-secondaryInteractive text-secondaryInteractive py-2 rounded-lg hover:bg-green-100 flex items-center justify-center">
               <FcGoogle className="text-xl"/>
+              <span className="ml-2">Sign up with Google</span>
             </button>
           </div>
         </div>

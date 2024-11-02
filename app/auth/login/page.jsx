@@ -78,8 +78,9 @@ const Login = () => {
           </form>
 
           <div className="mt-6 flex justify-center">
-            <button className="w-full bg-white border border-secondaryInteractive py-2 rounded-lg hover:bg-green-100 flex items-center justify-center">
+            <button className="w-full bg-white border border-secondaryInteractive text-secondaryInteractive py-2 rounded-lg hover:bg-green-100 flex items-center justify-center">
               <FcGoogle className="text-xl" />
+              <span className="ml-2">Login with Google</span>
             </button>
           </div>
         </div>
