@@ -15,4 +15,71 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
+.blur-map {
+  filter: blur(5px);
+  transition: filter 0.3s ease;
+}
 
+
+
+.navbar {
+  font-size: 13px;
+  background-color: #f1f1f1 !important;
+   }
+
+.navbar .nav-link {
+  color: #333; /* Darker text for better contrast */
+  transition: color 0.3s ease;
+}
+
+.navbar .nav-link:hover {
+  color: #007bff; /* Soft hover effect */
+}
+
+.navbar .dropdown-toggle {
+  cursor: pointer;
+}
+
+.soft-dropdown {
+  border-radius: 10px; /* Rounded corners for soft UI */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Soft shadow */
+}
+
+.dropdown-item {
+
+  padding: 4px 13px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #f1f1f1; /* Light hover effect */
+}
+
+.navbar .navbar-toggler {
+  border: none;
+}
+.navbarcss{
+   padding: 0px;
+  border-bottom: 0.3px solid rgb(206, 204, 204);
+}
+.sidebarcss{
+  border-right: 1px solid rgb(206, 204, 204);
+  font-size: 13px;
+}
+.navlist li{
+  padding: 1px;
+
+}
+.navbar .navbar-toggler-icon {
+  background-image: none;
+  font-size: 1.25rem;
+  color: #333;
+}
+
+.text-icon{
+  border: 1px solid white;
+  padding: 4px;
+  background-color:darkgrey;
+  border-radius: 25px;
+}
