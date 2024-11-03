@@ -1,10 +1,17 @@
-"use client"
-import GoogleMapView from "./components/GoogleMapView";
+"use client" 
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import React from 'react'; 
+import HomePage from './Pages/HomePg';
+import Navbar from './components/navbar';
 
 export default function Home() {
+ 
+
   return (
-    <div className="p-3">
-      <GoogleMapView />
-    </div>
+   <>
+    <Navbar />
+    
+   <HomePage />
+   </>
   );
 }
