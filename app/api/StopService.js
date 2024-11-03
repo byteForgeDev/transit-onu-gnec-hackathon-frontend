@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const API_STOP_URL = 'http://localhost:8080/api/stops';
-const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaXphbWFyemVzIiwiaWF0IjoxNzMwMzQyMDYyLCJleHAiOjE3MzA0Mjg0NjJ9.NJJlOxeTAXrFAXvOujEpdDhGIPgcOmmZxee-hdF4OHA'
+const API_STOP_URL = 'http://54.159.46.181:8080/api/stops';
+const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJTYW1wbGUgVXNlciIsImlhdCI6MTczMDY1NzM5MCwiZXhwIjoxNzMwNzQzNzkwfQ.jX04IScAqsOr1fwFgJRLmfvxJ0Z1Gu3ogH7fwHUsaxE';
 
 export const getStops = async() =>{
     try {
