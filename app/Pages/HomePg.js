@@ -1,5 +1,5 @@
 "use client"
-import GoogleMapView from '../Services/GoogleMapView';
+import GoogleMapView from '../components/GoogleMapView';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import React, { useContext } from 'react';
 import { UserLocationContext } from '../context/UserLocationContext';
@@ -8,7 +8,6 @@ import AnimatedButton from '../UIComponents/AnimBtn';
 import ReviewBox from '../components/ReviewBox';
 import NewsBox from '../components/newsBox';
   
-
 
 export default function HomePage() {
   const { userLocation } = useContext(UserLocationContext);

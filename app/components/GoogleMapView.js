@@ -3,7 +3,7 @@
 import { GoogleMap, LoadScript } from '@react-google-maps/api'
 import React, { useContext, useEffect, useState } from 'react'
 import { UserLocationContext } from '../context/UserLocationContext'
-import { getStops } from '../api/StopService'
+import { getStops } from '../services/StopService'
 
 const GoogleMapView = () => {
   const { userLocation, setUserLocation } = useContext(UserLocationContext)
@@ -32,13 +32,11 @@ const GoogleMapView = () => {
     setMap(mapInstance)
     if (userLocation) {
       try {
-        // Import AdvancedMarkerElement library
         const { AdvancedMarkerElement } = await google.maps.importLibrary(
           'marker'
         )
         setAdvancedMarkerLib(() => AdvancedMarkerElement)
 
-        // Creating a new marker instance if library loaded
         if (AdvancedMarkerElement) {
           const advancedMarker = new AdvancedMarkerElement({
             map: mapInstance,
@@ -46,7 +44,6 @@ const GoogleMapView = () => {
             title: 'User Location',
           })
 
-          // Customize icon
           advancedMarker.element.innerHTML = `
             <img src="/user-location-icon.png" style="width: 50px; height: 50px;" alt="User Location Icon" />
           `
