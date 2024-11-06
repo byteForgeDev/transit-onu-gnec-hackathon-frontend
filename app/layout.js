@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react'
 import './globals.css'
 import { UserLocationContext } from './context/UserLocationContext';
+import { AuthProvider } from './context/AuthContext';
+
 
 const metadata = {
   title: 'ByteForgeDev',
@@ -18,7 +20,7 @@ export default function RootLayout({ children }) {
   }, [])
 
   const getUserLocation = () => {
-    navigator.geolocation.getCurrentPosition(function(pos){
+    navigator.geolocation.getCurrentPosition(function (pos) {
       console.log(pos)
       setUserLocation({
         lat: pos.coords.latitude,
@@ -30,9 +32,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <UserLocationContext.Provider value={{userLocation, setUserLocation}}>
-          {children}
-        </UserLocationContext.Provider>
+        <AuthProvider>
+          <UserLocationContext.Provider value={{ userLocation, setUserLocation }}>
+            {children}
+          </UserLocationContext.Provider>
+        </AuthProvider>
       </body>
     </html>
   )
