@@ -4,7 +4,7 @@ import { GoogleMap, LoadScript } from '@react-google-maps/api'
 import React, { useContext, useEffect, useState } from 'react'
 import { UserLocationContext } from '../context/UserLocationContext'
 import { getStops } from '../services/StopService'
-
+ 
 const GoogleMapView = () => {
   const { userLocation, setUserLocation } = useContext(UserLocationContext)
   const [map, setMap] = useState(null)
@@ -25,7 +25,7 @@ const GoogleMapView = () => {
 
   const containerStyle = {
     width: '100%',
-    height: '70vh',
+    height: '100vh',  
   }
 
   const onLoadMap = async (mapInstance) => {
@@ -55,7 +55,7 @@ const GoogleMapView = () => {
   }
 
   return (
-    <div>
+    <div className="h-screen">
       <LoadScript
         googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_API_KEY}
         mapIds={['4cfa72a33bb70a22']}
