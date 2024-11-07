@@ -36,6 +36,39 @@
   color: #007bff; /* Soft hover effect */
 }
 
+.bgblue{
+  background-color: #007bff;
+  color: white;
+  padding: 2px 9px 2px 9px;
+  font-size: 12px;
+  border-radius: 16px;
+  box-shadow: 3px 3px 12px  grey;
+}
+.iconsection  {
+  display: flex;
+  justify-content: center;
+  padding: 2px;
+}
+.iconcss i{
+  color: white;
+  font-size: 10px;
+  padding: 5px 6px;
+}
+
+.iconsection button{
+  font-size: 16px;
+  color: black;
+  padding: 3px;
+  border-radius: 33px;
+  
+}
+.iconsection button i{
+   padding: 13px;
+   box-shadow: 1px 2px 8px  grey;
+
+  color: whitesmoke;
+  border-radius: 33px;
+}
 .navbar .dropdown-toggle {
   cursor: pointer;
 }
@@ -43,6 +76,11 @@
 .soft-dropdown {
   border-radius: 10px; /* Rounded corners for soft UI */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Soft shadow */
+}
+.hrstyle{
+  background-color: rgb(74, 74, 161);
+  padding: 1px;
+  
 }
 
 .dropdown-item {
@@ -56,6 +94,10 @@
   background-color: #f1f1f1; /* Light hover effect */
 }
 
+.bglightgray{
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  background-color: #e9ecef;
+}
 .navbar .navbar-toggler {
   border: none;
 }
@@ -82,4 +124,4 @@
   padding: 4px;
   background-color:darkgrey;
   border-radius: 25px;
-}
+ }
