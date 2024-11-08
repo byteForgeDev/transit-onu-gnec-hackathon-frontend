@@ -3,54 +3,27 @@
 import { GoogleMap, LoadScript } from '@react-google-maps/api'
 import React, { useContext, useEffect, useState } from 'react'
 import { UserLocationContext } from '../context/UserLocationContext'
-import { getStops } from '../services/StopService'
+import Markers from './Markers'
  
-const GoogleMapView = () => {
+const GoogleMapView = ({ busStopsList }) => {
   const { userLocation, setUserLocation } = useContext(UserLocationContext)
   const [map, setMap] = useState(null)
-  const [advancedMarkerLib, setAdvancedMarkerLib] = useState(null)
-
-  const getAllStops = async () => {
-    try {
-      const info = await getStops()
-      console.log(info)
-    } catch (error) {
-      console.error('Error fetching stops:', error)
-    }
-  }
-
-  useEffect(() => {
-    getAllStops()
-  }, [])
+  const [AdvancedMarkerElement, setAdvancedMarkerElement] = useState(null)
 
   const containerStyle = {
     width: '100%',
-    height: '100vh',  
+    height: '100vh',
   }
 
   const onLoadMap = async (mapInstance) => {
     setMap(mapInstance)
-    if (userLocation) {
-      try {
-        const { AdvancedMarkerElement } = await google.maps.importLibrary(
-          'marker'
-        )
-        setAdvancedMarkerLib(() => AdvancedMarkerElement)
-
-        if (AdvancedMarkerElement) {
-          const advancedMarker = new AdvancedMarkerElement({
-            map: mapInstance,
-            position: userLocation,
-            title: 'User Location',
-          })
-
-          advancedMarker.element.innerHTML = `
-            <img src="/user-location-icon.png" style="width: 50px; height: 50px;" alt="User Location Icon" />
-          `
-        }
-      } catch (error) {
-        console.error('Error loading AdvancedMarkerElement library', error)
-      }
+    try {
+      const { AdvancedMarkerElement } = await google.maps.importLibrary(
+        'marker'
+      )
+      setAdvancedMarkerElement(() => AdvancedMarkerElement)
+    } catch (error) {
+      console.error('Error loading AdvancedMarkerElement library:', error)
     }
   }
 
@@ -58,15 +31,35 @@ const GoogleMapView = () => {
     <div className="h-screen">
       <LoadScript
         googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_API_KEY}
-        mapIds={['4cfa72a33bb70a22']}
       >
         <GoogleMap
           mapContainerStyle={containerStyle}
-          center={userLocation}
-          options={{ mapId: '4cfa72a33bb70a22' }}
+          center={userLocation || { lat: 0, lng: 0 }}
           zoom={17}
           onLoad={onLoadMap}
-        />
+          options={{ mapId: '4cfa72a33bb70a22' }} // Apply the custom style here
+        >
+          {AdvancedMarkerElement && map && (
+            <>
+              {/* User location marker */}
+              <Markers
+                map={map}
+                AdvancedMarkerElement={AdvancedMarkerElement}
+                userLocation={userLocation}
+              />
+
+              {/* Bus stop markers */}
+              {busStopsList.slice(0, 8).map((busStop, index) => (
+                <Markers
+                  key={index}
+                  map={map}
+                  AdvancedMarkerElement={AdvancedMarkerElement}
+                  busStop={busStop}
+                />
+              ))}
+            </>
+          )}
+        </GoogleMap>
       </LoadScript>
     </div>
   )

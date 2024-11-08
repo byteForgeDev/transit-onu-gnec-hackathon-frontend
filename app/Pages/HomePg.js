@@ -1,23 +1,40 @@
 "use client"
 import GoogleMapView from '../components/GoogleMapView';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { UserLocationContext } from '../context/UserLocationContext';
 import InputField from '../components/inputField';
 import AnimatedButton from '../UIComponents/AnimBtn';
 import ReviewBox from '../components/ReviewBox';
 import NewsBox from '../components/newsBox';
+import GlobalApi from '../shared/GlobalApi';
   
 
 export default function HomePage() {
-  const { userLocation } = useContext(UserLocationContext);
+  const { userLocation, setUserLocation } = useContext(UserLocationContext);
+  const [ busStopsList, setBusStopsList ] = useState([]);
 
+  useEffect(() => {
+    if (userLocation && userLocation.lat && userLocation.lng) {
+      getGooglePlaceBusStops()
+    }
+  }, [userLocation])
+
+  const getGooglePlaceBusStops = () => {
+    GlobalApi.getGooglePlaceBusStops(userLocation.lat, userLocation.lng)
+      .then((resp) => {
+        setBusStopsList(resp.data.data.results)
+      })
+      .catch((error) => {
+        console.error('Failed to fetch bus stops:', error)
+      })
+  }
 
   return (
    <>
    
        <div className="relative">
-        <GoogleMapView userLocation={userLocation} />
+        <GoogleMapView busStopsList={busStopsList} />
 
         {/* Overlay content for input and button component */}
         <div className="absolute top-[calc(80%-15px)] left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-100 p-4 rounded-lg shadow-md flex items-center space-y-2 w-11/12 max-w-md md:max-w-lg lg:max-w-xl">
