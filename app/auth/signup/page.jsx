@@ -17,7 +17,7 @@ const Signup = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-  const [countryName, setCountry] = useState(null)
+  const [countryName, setCountry] = useState('')
   const [cityName, setCity] = useState('')
   const [error, setError] = useState('')
   const router = useRouter()
@@ -32,14 +32,14 @@ const Signup = () => {
       setError('Passwords do not match')
       return
     }
-
+    
     try {
       await register(
         username,
         password,
         email,
         '',
-        ['ADMIN'],
+        ['USER'],
         cityName,
         countryName.label
       )
