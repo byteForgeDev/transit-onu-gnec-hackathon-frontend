@@ -33,7 +33,7 @@ const fetchReviews = async () => {
     const reviews = response.data;
     return reviews;  
   } catch (error) {
-    console.error("Error fetching reviews:", error);
+    console.log("Error fetching reviews:", error);
     throw error;
   }
 };

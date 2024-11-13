@@ -27,7 +27,7 @@ const GoogleMapView = ({ busStopsList }) => {
       )
       setAdvancedMarkerElement(() => AdvancedMarkerElement)
     } catch (error) {
-      console.error('Error loading AdvancedMarkerElement library:', error)
+      console.log('Error loading AdvancedMarkerElement library:', error)
     }
   }
 
