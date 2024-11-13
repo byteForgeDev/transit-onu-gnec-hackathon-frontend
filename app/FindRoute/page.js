@@ -41,7 +41,12 @@ const FindRoute = () => {
   const { userLocation } = useContext(UserLocationContext);
   const router = useRouter();
   
-   const { destination } = router.query || {}; 
+  const { destination } = router.query || {}; 
+
+  // Format the user's location as a string for the starting point input
+  const formattedLocation = userLocation
+    ? `${userLocation.lat.toFixed(4)}, ${userLocation.lng.toFixed(4)}`
+    : "";
 
   useEffect(() => {
     if (destination) {
@@ -69,7 +74,13 @@ const FindRoute = () => {
         <div className="space-y-2">
           <div style={{ backgroundColor: "white" }} className="flex items-center border border-green-500 rounded-lg p-3">
             <i className="fas fa-arrow-right mr-2"></i>
-            <input type="text" placeholder="Starting Point" className="w-full focus:outline-none" />
+            <input 
+              type="text" 
+              placeholder="Starting Point" 
+              value={formattedLocation || ""}
+              className="w-full focus:outline-none" 
+              readOnly 
+            />
           </div>
           <div style={{ backgroundColor: "white" }} className="flex items-center border border-green-500 rounded-lg p-3">
             <i className="fas fa-map-marker-alt text-green-500 mr-2"></i>
