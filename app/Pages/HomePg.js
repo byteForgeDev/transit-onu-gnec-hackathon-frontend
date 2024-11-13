@@ -1,4 +1,5 @@
 "use client"
+
 import GoogleMapView from '../components/GoogleMapView';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import React, { useContext, useEffect, useState } from 'react';
@@ -8,8 +9,8 @@ import AnimatedButton from '../UIComponents/AnimBtn';
 import ReviewBox from '../components/ReviewBox';
 import NewsBox from '../components/newsBox';
 import GlobalApi from '../shared/GlobalApi';
-import axios from 'axios';
 import { useRouter } from 'next/navigation';  
+<<<<<<< HEAD
 
 const getToken = () => {
   return localStorage.getItem("token");
@@ -37,6 +38,9 @@ const fetchReviews = async () => {
     throw error;
   }
 };
+=======
+import { fetchReviews } from '../api/ReviewService'; 
+>>>>>>> 09026ae02a6cd9f8464220bfb329816314baa89d
 
 export default function HomePage() {
   const { userLocation, setUserLocation } = useContext(UserLocationContext);
@@ -58,6 +62,7 @@ export default function HomePage() {
       .catch((error) => {
         setError("Failed to fetch reviews");
       });
+
   }, [userLocation]);
 
   const getGooglePlaceBusStops = () => {
