@@ -15,8 +15,7 @@ const GoogleMapView = ({ busStopsList }) => {
     height: '100vh',
   }
 
-  // Ensure the userLocation is valid
-  const isValidLocation = (location) => {
+   const isValidLocation = (location) => {
     return location && !isNaN(location.lat) && !isNaN(location.lng)
   }
 
@@ -33,8 +32,7 @@ const GoogleMapView = ({ busStopsList }) => {
   }
 
   useEffect(() => {
-    // Optionally, fetch the user's current location if it's not provided
-    if (!userLocation || !isValidLocation(userLocation)) {
+     if (!userLocation || !isValidLocation(userLocation)) {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
@@ -42,17 +40,16 @@ const GoogleMapView = ({ busStopsList }) => {
               lat: position.coords.latitude,
               lng: position.coords.longitude,
             }
-            setUserLocation(newLocation) // Update userLocation from geolocation API
+            setUserLocation(newLocation)  
           },
           (error) => {
             console.error('Error getting user location:', error)
-            // Default to a fallback location (e.g., New York)
-            setUserLocation({ lat: 40.7128, lng: -74.0060 })
+             setUserLocation({ lat: 40.7128, lng: -74.0060 })
           }
         )
       } else {
         console.error('Geolocation is not supported by this browser.')
-        setUserLocation({ lat: 40.7128, lng: -74.0060 }) // Default fallback location
+        setUserLocation({ lat: 40.7128, lng: -74.0060 }) 
       }
     }
   }, [userLocation, setUserLocation])
@@ -65,7 +62,7 @@ const GoogleMapView = ({ busStopsList }) => {
           center={isValidLocation(userLocation) ? userLocation : { lat: 0, lng: 0 }}
           zoom={17}
           onLoad={onLoadMap}
-          options={{ mapId: '4cfa72a33bb70a22' }} // Apply the custom style here
+          options={{ mapId: '4cfa72a33bb70a22' }}  
         >
           {AdvancedMarkerElement && map && (
             <>

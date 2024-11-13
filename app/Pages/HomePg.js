@@ -43,8 +43,8 @@ export default function HomePage() {
   const [busStopsList, setBusStopsList] = useState([]);
   const [reviews, setReviews] = useState([]);  
   const [error, setError] = useState(null);  
-  const [destination, setDestination] = useState(""); // Make sure to define state for destination
-  const router = useRouter(); // Initialize the useRouter hook
+  const [destination, setDestination] = useState("");  
+  const router = useRouter();  
 
   useEffect(() => {
     if (userLocation && userLocation.lat && userLocation.lng) {
@@ -70,10 +70,9 @@ export default function HomePage() {
       });
   };
 
-  // Function to handle the button click to navigate to the second page
-  const handleFindRouteClick = () => {
+   const handleFindRouteClick = () => {
    
-      router.push(`/FindRoute?destination=${destination}`); // Navigate to the second page with destination as a query parameter
+      router.push(`/FindRoute?destination=${destination}`);  
     
   };
 
@@ -86,7 +85,7 @@ export default function HomePage() {
           <InputField />
           <AnimatedButton
             text="Find Routes"
-            onClick={handleFindRouteClick} // Call the function on button click
+            onClick={handleFindRouteClick} // Call above function on button click
             color="black"
             borderColor="grey"
             shadowColor="grey"

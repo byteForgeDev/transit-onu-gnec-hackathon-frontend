@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { UserLocationContext } from "../context/UserLocationContext";
 import GoogleMapView from "../components/GoogleMapView";
 import RouteCard from "../components/RouteCard";
-import { useRouter } from "next/navigation"; // Import useRouter to read URL parameters
+import { useRouter } from "next/navigation";  
 
 const routeData = [
   {
@@ -41,12 +41,11 @@ const FindRoute = () => {
   const { userLocation } = useContext(UserLocationContext);
   const router = useRouter();
   
-  // Use optional chaining to safely access router.query
-  const { destination } = router.query || {}; // Fallback to empty object if undefined
+   const { destination } = router.query || {}; 
 
   useEffect(() => {
     if (destination) {
-      console.log("Destination:", destination); // Use the destination data in your component
+      console.log("Destination:", destination); 
     }
   }, [destination]);
 
