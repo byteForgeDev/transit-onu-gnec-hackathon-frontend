@@ -8,40 +8,85 @@ import AnimatedButton from '../UIComponents/AnimBtn';
 import ReviewBox from '../components/ReviewBox';
 import NewsBox from '../components/newsBox';
 import GlobalApi from '../shared/GlobalApi';
-  
+import axios from 'axios';
+import { useRouter } from 'next/navigation';  
+
+const getToken = () => {
+  return localStorage.getItem("token");
+};
+
+const URL1 = 'http://localhost:8080/api/reviews?sort=none';
+
+const fetchReviews = async () => {
+  try {
+    const token = getToken();
+    if (!token) {
+      throw new Error('No token found');
+    }
+
+    const response = await axios.get(URL1, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const reviews = response.data;
+    return reviews;  
+  } catch (error) {
+    console.error("Error fetching reviews:", error);
+    throw error;
+  }
+};
 
 export default function HomePage() {
   const { userLocation, setUserLocation } = useContext(UserLocationContext);
-  const [ busStopsList, setBusStopsList ] = useState([]);
+  const [busStopsList, setBusStopsList] = useState([]);
+  const [reviews, setReviews] = useState([]);  
+  const [error, setError] = useState(null);  
+  const [destination, setDestination] = useState(""); // Make sure to define state for destination
+  const router = useRouter(); // Initialize the useRouter hook
 
   useEffect(() => {
     if (userLocation && userLocation.lat && userLocation.lng) {
-      getGooglePlaceBusStops()
+      getGooglePlaceBusStops();
     }
-  }, [userLocation])
+
+     fetchReviews()
+      .then((reviews) => {
+        setReviews(reviews); 
+      })
+      .catch((error) => {
+        setError("Failed to fetch reviews");
+      });
+  }, [userLocation]);
 
   const getGooglePlaceBusStops = () => {
     GlobalApi.getGooglePlaceBusStops(userLocation.lat, userLocation.lng)
       .then((resp) => {
-        setBusStopsList(resp.data.data.results)
+        setBusStopsList(resp.data.data.results);
       })
       .catch((error) => {
-        console.error('Failed to fetch bus stops:', error)
-      })
-  }
+        console.error('Failed to fetch bus stops:', error);
+      });
+  };
+
+  // Function to handle the button click to navigate to the second page
+  const handleFindRouteClick = () => {
+   
+      router.push(`/FindRoute?destination=${destination}`); // Navigate to the second page with destination as a query parameter
+    
+  };
 
   return (
-   <>
-   
-       <div className="relative">
+    <>
+      <div className="relative">
         <GoogleMapView busStopsList={busStopsList} />
 
-        {/* Overlay content for input and button component */}
-        <div className="absolute top-[calc(80%-15px)] left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-100 p-4 rounded-lg shadow-md flex items-center space-y-2 w-11/12 max-w-md md:max-w-lg lg:max-w-xl">
+         <div className="absolute top-[calc(80%-15px)] left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-100 p-4 rounded-lg shadow-md flex items-center space-y-2 w-11/12 max-w-md md:max-w-lg lg:max-w-xl">
           <InputField />
           <AnimatedButton
-              text="Find Routes"
-            onClick={() => alert("Finding Routes")}
+            text="Find Routes"
+            onClick={handleFindRouteClick} // Call the function on button click
             color="black"
             borderColor="grey"
             shadowColor="grey"
@@ -49,25 +94,25 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Container below the map, holding reviews and news */}
-      <div className="flex flex-col md:flex-row p-4 gap-3">
+       <div className="flex flex-col md:flex-row p-4 gap-3">
         <div className="md:w-1/2 space-y-2">
-          <ReviewBox
-            title="Route Review 1"
-            rating={4}
-            start="Starting Point Name"
-            end="Ending Location"
-            description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque..."
-            onReadMore={() => alert("Read More clicked!")}
-          />
-          <ReviewBox
-            title="Route Review 2"
-            rating={5}
-            start="Another Starting Point"
-            end="Another Ending Location"
-            description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque..."
-            onReadMore={() => alert("Read More clicked!")}
-          />
+          {error && <div className="text-red-500">{error}</div>} 
+
+          {reviews && reviews.length > 0 ? (
+            reviews.map((review) => (
+              <ReviewBox
+                key={review.id}
+                title={review.title}
+                rating={review.stars}
+                start={review.route.name}
+                end={review.route.name}  
+                description={review.content}
+                onReadMore={() => alert("Read More clicked!")}
+              />
+            ))
+          ) : (
+            <div>No reviews are available</div>  
+          )}
         </div>
 
         <div className="md:w-1/2 space-y-2">
@@ -85,6 +130,6 @@ export default function HomePage() {
           />
         </div>
       </div>
-   </>
+    </>
   );
 }
