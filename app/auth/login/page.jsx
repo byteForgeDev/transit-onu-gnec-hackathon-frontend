@@ -1,4 +1,5 @@
 'use client'
+
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -6,28 +7,32 @@ import { FcGoogle } from 'react-icons/fc'
 import Image from 'next/image'
 import Navbar from '@/app/components/navbar'
 import '@fortawesome/fontawesome-free/css/all.min.css'
+import { login as apiLogin } from '../../api/AuthService'
 import { useAuth } from '../../context/AuthContext'
-import { login } from '../../api/AuthService'
 
 const Login = () => {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const router = useRouter()
-  const { setIsSignedIn } = useAuth()
+  const[username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const router = useRouter();
+  const { login } = useAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault()
     try {
-      const result = await login(username, password)
+      const result = await apiLogin(username, password)
       console.log('Login successful:', result)
-      setIsSignedIn(true)
-      router.push('/')
+
+      login(result.token) // Call AuthContext's login function with the token
+
+      // Redirect to /home after successful login
+      router.push('/home')
     } catch (error) {
       setError('Failed to login. Please check your credentials.')
       console.error('Login error:', error)
     }
   }
+
 
   return (
     <div>
