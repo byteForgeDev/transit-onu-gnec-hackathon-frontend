@@ -15,10 +15,6 @@ const GoogleMapView = ({ busStopsList }) => {
     height: '100vh',
   }
 
-   const isValidLocation = (location) => {
-    return location && !isNaN(location.lat) && !isNaN(location.lng)
-  }
-
   const onLoadMap = async (mapInstance) => {
     setMap(mapInstance)
     try {
@@ -31,35 +27,14 @@ const GoogleMapView = ({ busStopsList }) => {
     }
   }
 
-  useEffect(() => {
-     if (!userLocation || !isValidLocation(userLocation)) {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const newLocation = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude,
-            }
-            setUserLocation(newLocation)  
-          },
-          (error) => {
-            console.error('Error getting user location:', error)
-             setUserLocation({ lat: 40.7128, lng: -74.0060 })
-          }
-        )
-      } else {
-        console.error('Geolocation is not supported by this browser.')
-        setUserLocation({ lat: 40.7128, lng: -74.0060 }) 
-      }
-    }
-  }, [userLocation, setUserLocation])
-
   return (
     <div className="h-screen">
-      <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_API_KEY}>
+      <LoadScript 
+        googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_API_KEY}
+      >
         <GoogleMap
           mapContainerStyle={containerStyle}
-          center={isValidLocation(userLocation) ? userLocation : { lat: 0, lng: 0 }}
+          center={userLocation || { lat: 0, lng: 0 }}
           zoom={17}
           onLoad={onLoadMap}
           options={{ mapId: '4cfa72a33bb70a22' }}  
