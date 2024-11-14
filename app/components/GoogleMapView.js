@@ -4,7 +4,7 @@ import { GoogleMap, LoadScript } from '@react-google-maps/api'
 import React, { useContext, useEffect, useState } from 'react'
 import { UserLocationContext } from '../context/UserLocationContext'
 import Markers from './Markers'
- 
+
 const GoogleMapView = ({ busStopsList }) => {
   const { userLocation, setUserLocation } = useContext(UserLocationContext)
   const [map, setMap] = useState(null)
@@ -29,11 +29,7 @@ const GoogleMapView = ({ busStopsList }) => {
 
   return (
     <div className="h-screen">
-<<<<<<< HEAD
-      <LoadScript
-=======
       <LoadScript 
->>>>>>> upstream/dev
         googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_API_KEY}
       >
         <GoogleMap
@@ -41,7 +37,7 @@ const GoogleMapView = ({ busStopsList }) => {
           center={userLocation || { lat: 0, lng: 0 }}
           zoom={17}
           onLoad={onLoadMap}
-          options={{ mapId: '4cfa72a33bb70a22' }} 
+          options={{ mapId: '4cfa72a33bb70a22' }}  
         >
           {AdvancedMarkerElement && map && (
             <>

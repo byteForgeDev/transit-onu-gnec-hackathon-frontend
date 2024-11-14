@@ -1,4 +1,5 @@
-"use client";
+"use client"
+
 import GoogleMapView from '../components/GoogleMapView';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import React, { useContext, useEffect, useState } from 'react';
@@ -9,56 +10,35 @@ import ReviewBox from '../components/ReviewBox';
 import NewsBox from '../components/newsBox';
 import GlobalApi from '../shared/GlobalApi';
 import { useRouter } from 'next/navigation';  
-import { fetchReviews } from '../api/ReviewService';
+import { fetchReviews } from '../api/ReviewService'; 
 
 export default function HomePage() {
-<<<<<<< HEAD
-  const { userLocation } = useContext(UserLocationContext);
-=======
   const { userLocation } = useContext(UserLocationContext)
->>>>>>> upstream/dev
   const [busStopsList, setBusStopsList] = useState([]);
   const [reviews, setReviews] = useState([]);  
   const [error, setError] = useState(null);  
-  const [destination, setDestination] = useState("");
+  const [destination, setDestination] = useState("");  
   const router = useRouter();  
 
   useEffect(() => {
-<<<<<<< HEAD
-     if (userLocation?.lat && userLocation?.lng) {
-      getGooglePlaceBusStops();
-    }
-=======
      if(userLocation?.lat && userLocation?.lng) {
       getGooglePlaceBusStops()
      }
->>>>>>> upstream/dev
 
      fetchReviews()
       .then((fetchedReviews) => setReviews(fetchedReviews))
       .catch(() => setError("Failed to fetch reviews"));
-<<<<<<< HEAD
-=======
 
->>>>>>> upstream/dev
   }, [userLocation]);
 
   const getGooglePlaceBusStops = () => {
     GlobalApi.getGooglePlaceBusStops(userLocation.lat, userLocation.lng)
       .then((resp) => setBusStopsList(resp.data.data.results))
-<<<<<<< HEAD
-      .catch((error) => console.error('Failed to fetch bus stops:', error));
-  };
-
-  const handleFindRouteClick = () => {
-    router.push(`/FindRoute?destination=${destination}`);  
-=======
       .catch((error) => console.error('Failed to fetch bus stops:', error))
   };
 
    const handleFindRouteClick = () => {
       router.push(`/FindRoute?destination=${destination}`);  
->>>>>>> upstream/dev
   };
 
   return (
@@ -70,7 +50,7 @@ export default function HomePage() {
           <InputField />
           <AnimatedButton
             text="Find Routes"
-            onClick={handleFindRouteClick}
+            onClick={handleFindRouteClick} // Call above function on button click
             color="black"
             borderColor="grey"
             shadowColor="grey"
