@@ -5,6 +5,7 @@ import { UserLocationContext } from "../context/UserLocationContext";
 import GoogleMapView from "../components/GoogleMapView";
 import RouteCard from "../components/RouteCard";
 import { useRouter } from "next/navigation";  
+import Navbar from "../components/navbar";
 
 const routeData = [
   {
@@ -55,6 +56,8 @@ const FindRoute = () => {
   }, [destination]);
 
   return (
+    <>
+    <Navbar />
     <div className="flex h-screen ">
       <div className="md:w-1/3 bglightgray p-2 overflow-y-auto space-y-1 h-screen">
         <div className="flex iconsection items-center mt-2 space-x-3">
@@ -107,6 +110,7 @@ const FindRoute = () => {
         <GoogleMapView busStopsList={[]} />
       </div>
     </div>
+    </>
   );
 };
 
