@@ -12,7 +12,11 @@ import { useRouter } from 'next/navigation';
 import { fetchReviews } from '../api/ReviewService';
 
 export default function HomePage() {
+<<<<<<< HEAD
   const { userLocation } = useContext(UserLocationContext);
+=======
+  const { userLocation } = useContext(UserLocationContext)
+>>>>>>> upstream/dev
   const [busStopsList, setBusStopsList] = useState([]);
   const [reviews, setReviews] = useState([]);  
   const [error, setError] = useState(null);  
@@ -20,23 +24,41 @@ export default function HomePage() {
   const router = useRouter();  
 
   useEffect(() => {
+<<<<<<< HEAD
      if (userLocation?.lat && userLocation?.lng) {
       getGooglePlaceBusStops();
     }
+=======
+     if(userLocation?.lat && userLocation?.lng) {
+      getGooglePlaceBusStops()
+     }
+>>>>>>> upstream/dev
 
      fetchReviews()
       .then((fetchedReviews) => setReviews(fetchedReviews))
       .catch(() => setError("Failed to fetch reviews"));
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/dev
   }, [userLocation]);
 
   const getGooglePlaceBusStops = () => {
     GlobalApi.getGooglePlaceBusStops(userLocation.lat, userLocation.lng)
       .then((resp) => setBusStopsList(resp.data.data.results))
+<<<<<<< HEAD
       .catch((error) => console.error('Failed to fetch bus stops:', error));
   };
 
   const handleFindRouteClick = () => {
     router.push(`/FindRoute?destination=${destination}`);  
+=======
+      .catch((error) => console.error('Failed to fetch bus stops:', error))
+  };
+
+   const handleFindRouteClick = () => {
+      router.push(`/FindRoute?destination=${destination}`);  
+>>>>>>> upstream/dev
   };
 
   return (
@@ -58,7 +80,7 @@ export default function HomePage() {
 
       <div className="flex flex-col md:flex-row p-4 gap-3">
         <div className="md:w-1/2 space-y-2">
-          {error && <div className="text-red-500">{error}</div>} 
+          {error && <div className="text-red-500">{error}</div>}
 
           {reviews.length > 0 ? (
             reviews.map((review) => (
@@ -69,7 +91,7 @@ export default function HomePage() {
                 start={review.route.name}
                 end={review.route.name}
                 description={review.content}
-                onReadMore={() => alert("Read More clicked!")}
+                onReadMore={() => alert('Read More clicked!')}
               />
             ))
           ) : (
@@ -84,5 +106,5 @@ export default function HomePage() {
         </div>
       </div>
     </>
-  );
+  )
 }

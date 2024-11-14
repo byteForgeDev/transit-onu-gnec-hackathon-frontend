@@ -57,6 +57,7 @@ const FindRoute = () => {
 
   return (
     <>
+<<<<<<< HEAD
     <Navbar />
     <div className="flex h-screen ">
       <div className="md:w-1/3 bglightgray p-2 overflow-y-auto space-y-1 h-screen">
@@ -84,27 +85,68 @@ const FindRoute = () => {
               className="w-full focus:outline-none" 
               readOnly 
             />
+=======
+      <Navbar />
+      <div className="flex h-screen ">
+        <div className="md:w-1/3 bglightgray p-2 overflow-y-auto space-y-1 h-screen">
+          <div className="flex iconsection items-center mt-2 space-x-3">
+            <button className="">
+              <i className="fas fa-walking bg-blue-500 rounded-full"></i>
+            </button>
+            <button className="">
+              <i className="fas fa-train bg-purple-500 rounded-full"></i>
+            </button>
+            <button className="">
+              <i className="fas fa-bus p-2 bg-green-500 rounded-full"></i>
+            </button>
+            <button className="">
+              <i className="fas fa-bicycle p-2 bg-blue-500 rounded-full"></i>
+            </button>
+>>>>>>> upstream/dev
           </div>
-          <div style={{ backgroundColor: "white" }} className="flex items-center border border-green-500 rounded-lg p-3">
-            <i className="fas fa-map-marker-alt text-green-500 mr-2"></i>
-            <input
-              type="text"
-              value={destination || ""}
-              placeholder="Destination"
-              className="w-full focus:outline-none"
-              readOnly
-            />
+          <div className="space-y-2">
+            <div
+              style={{ backgroundColor: 'white' }}
+              className="flex items-center border border-green-500 rounded-lg p-3"
+            >
+              <i className="fas fa-arrow-right mr-2"></i>
+              <input
+                type="text"
+                placeholder="Starting Point"
+                value={formattedLocation || ''}
+                className="w-full focus:outline-none"
+                readOnly
+              />
+            </div>
+            <div
+              style={{ backgroundColor: 'white' }}
+              className="flex items-center border border-green-500 rounded-lg p-3"
+            >
+              <i className="fas fa-map-marker-alt text-green-500 mr-2"></i>
+              <input
+                type="text"
+                value={destination || ''}
+                placeholder="Destination"
+                className="w-full focus:outline-none"
+                readOnly
+              />
+            </div>
+          </div>
+
+          <hr className="py-4 hrstyle" />
+
+          <div className="space-y-1">
+            {routeData.map((route, index) => (
+              <RouteCard key={index} route={route} />
+            ))}
           </div>
         </div>
 
-        <hr className="py-4 hrstyle" />
-
-        <div className="space-y-1">
-          {routeData.map((route, index) => (
-            <RouteCard key={index} route={route} />
-          ))}
+        <div className="md:w-2/3">
+          <GoogleMapView busStopsList={[]} />
         </div>
       </div>
+<<<<<<< HEAD
 
       <div className="md:w-2/3">
         <GoogleMapView busStopsList={[]} />
@@ -112,6 +154,10 @@ const FindRoute = () => {
     </div>
     </>
   );
+=======
+    </>
+  )
+>>>>>>> upstream/dev
 };
 
 export default FindRoute;

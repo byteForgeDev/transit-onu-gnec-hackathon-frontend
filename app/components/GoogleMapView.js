@@ -29,7 +29,11 @@ const GoogleMapView = ({ busStopsList }) => {
 
   return (
     <div className="h-screen">
+<<<<<<< HEAD
       <LoadScript
+=======
+      <LoadScript 
+>>>>>>> upstream/dev
         googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_API_KEY}
       >
         <GoogleMap

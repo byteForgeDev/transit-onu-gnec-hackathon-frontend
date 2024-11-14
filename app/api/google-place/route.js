@@ -2,7 +2,7 @@ import axios from 'axios'
 import { NextResponse } from 'next/server';
 
 const API_STOP_URL = `http://${process.env.REACT_APP_IP_PUBLIC}:8080/api/stops`;
-const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
+const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
 const BASE_URL = 'https://maps.googleapis.com/maps/api/place';
 
 export const getStops = async () => {
@@ -38,6 +38,9 @@ export async function GET(request) {
     )
 
     const data = await res.json()
+    const userAddress = await getAddressFromCoordinates(lat, lng);
+    console.log("--------------")
+    console.log(userAddress)
     return NextResponse.json({ data })
   } catch (error) {
     console.error('Error fetching bus stops:', error)
@@ -45,5 +48,22 @@ export async function GET(request) {
       { error: 'Failed to fetch bus stops' },
       { status: 500 }
     )
+  }
+}
+
+export const getAddressFromCoordinates = async (lat, lng) => {
+  try {
+    const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_API_KEY}`);
+    const data = await response.json();
+    
+    if (data.status === 'OK' && data.results[0]) {
+      return data.results[0].formatted_address;
+    } else {
+      console.error("Geocoding API error:", data.status);
+      return "Address not found";
+    }
+  } catch (error) {
+    console.error("Error fetching address:", error);
+    return "Address not found";
   }
 }
