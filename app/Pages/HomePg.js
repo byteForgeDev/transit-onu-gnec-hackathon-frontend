@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import GoogleMapView from '../components/GoogleMapView';
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -9,23 +9,23 @@ import AnimatedButton from '../UIComponents/AnimBtn';
 import ReviewBox from '../components/ReviewBox';
 import NewsBox from '../components/newsBox';
 import GlobalApi from '../shared/GlobalApi';
-import { useRouter } from 'next/navigation';  
-import { fetchReviews } from '../api/ReviewService'; 
+import { useRouter } from 'next/navigation';
+import { fetchReviews } from '../api/ReviewService';
 
 export default function HomePage() {
-  const { userLocation } = useContext(UserLocationContext)
+  const { userLocation } = useContext(UserLocationContext);
   const [busStopsList, setBusStopsList] = useState([]);
-  const [reviews, setReviews] = useState([]);  
-  const [error, setError] = useState(null);  
+  const [reviews, setReviews] = useState([]);
+  const [error, setError] = useState(null);
   const [destination, setDestination] = useState("");  
-  const router = useRouter();  
+  const router = useRouter();
 
   useEffect(() => {
-     if(userLocation?.lat && userLocation?.lng) {
-      getGooglePlaceBusStops()
-     }
+    if (userLocation?.lat && userLocation?.lng) {
+      getGooglePlaceBusStops();
+    }
 
-     fetchReviews()
+    fetchReviews()
       .then((fetchedReviews) => setReviews(fetchedReviews))
       .catch(() => setError("Failed to fetch reviews"));
 
@@ -34,23 +34,24 @@ export default function HomePage() {
   const getGooglePlaceBusStops = () => {
     GlobalApi.getGooglePlaceBusStops(userLocation.lat, userLocation.lng)
       .then((resp) => setBusStopsList(resp.data.data.results))
-      .catch((error) => console.error('Failed to fetch bus stops:', error))
+      .catch((error) => console.error('Failed to fetch bus stops:', error));
   };
 
-   const handleFindRouteClick = () => {
-      router.push(`/FindRoute?destination=${destination}`);  
+  const handleFindRouteClick = () => {
+    const formattedDestination = destination.replace(/\s+/g, '-');
+    router.push(`/FindRoute?destination=${formattedDestination}`);
   };
-
+  
   return (
     <>
       <div className="relative">
         <GoogleMapView busStopsList={busStopsList} />
 
         <div className="absolute top-[calc(80%-15px)] left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-100 p-4 rounded-lg shadow-md flex items-center space-y-2 w-11/12 max-w-md md:max-w-lg lg:max-w-xl">
-          <InputField />
+          <InputField value={destination} onChange={setDestination} /> 
           <AnimatedButton
             text="Find Routes"
-            onClick={handleFindRouteClick} // Call above function on button click
+            onClick={handleFindRouteClick}
             color="black"
             borderColor="grey"
             shadowColor="grey"

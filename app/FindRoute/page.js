@@ -1,11 +1,11 @@
 "use client";
-
 import React, { useContext, useEffect, useState } from "react";
 import { UserLocationContext } from "../context/UserLocationContext";
 import GoogleMapView from "../components/GoogleMapView";
-import RouteCard from "../components/RouteCard";
-import { useRouter } from "next/navigation";  
+import { useSearchParams } from "next/navigation";
 import Navbar from "../components/navbar";
+import { getAddressFromCoordinates, getCoordinatesFromAddress } from "../api/google-place/route";
+import RouteCard from "../components/RouteCard";
 
 const routeData = [
   {
@@ -40,69 +40,60 @@ const routeData = [
 
 const FindRoute = () => {
   const { userLocation } = useContext(UserLocationContext);
-  const router = useRouter();
-  
-  const { destination } = router.query || {}; 
-
-  // Format the user's location as a string for the starting point input
-  const formattedLocation = userLocation
-    ? `${userLocation.lat.toFixed(4)}, ${userLocation.lng.toFixed(4)}`
-    : "";
+  const searchParams = useSearchParams();
+  const destination = searchParams.get("destination") || ""; 
+  const [startingAddress, setStartingAddress] = useState("Loading...");
+  const [destinationLocation, setDestinationLocation] = useState(null);
 
   useEffect(() => {
+    // Fetch starting address based on user's current location
+    if (userLocation?.lat && userLocation?.lng) {
+      const fetchAddress = async () => {
+        const address = await getAddressFromCoordinates(userLocation.lat, userLocation.lng);
+        setStartingAddress(address || "Address not found");
+      };
+      fetchAddress();
+    }
+  }, [userLocation]);
+
+  useEffect(() => {
+    // Fetch destination location coordinates
     if (destination) {
-      console.log("Destination:", destination); 
+      getCoordinatesFromAddress(destination)
+        .then((coords) => {
+          if (coords) setDestinationLocation(coords);
+        })
+        .catch(error => console.error("Error fetching destination coordinates:", error));
     }
   }, [destination]);
 
   return (
     <>
       <Navbar />
-      <div className="flex h-screen ">
+      <div className="flex h-screen">
         <div className="md:w-1/3 bglightgray p-2 overflow-y-auto space-y-1 h-screen">
-          <div className="flex iconsection items-center mt-2 space-x-3">
-            <button className="">
-              <i className="fas fa-walking bg-blue-500 rounded-full"></i>
-            </button>
-            <button className="">
-              <i className="fas fa-train bg-purple-500 rounded-full"></i>
-            </button>
-            <button className="">
-              <i className="fas fa-bus p-2 bg-green-500 rounded-full"></i>
-            </button>
-            <button className="">
-              <i className="fas fa-bicycle p-2 bg-blue-500 rounded-full"></i>
-            </button>
-          </div>
           <div className="space-y-2">
-            <div
-              style={{ backgroundColor: 'white' }}
-              className="flex items-center border border-green-500 rounded-lg p-3"
-            >
+            <div className="flex items-center border border-green-500 rounded-lg p-3">
               <i className="fas fa-arrow-right mr-2"></i>
               <input
                 type="text"
                 placeholder="Starting Point"
-                value={formattedLocation || ''}
-                className="w-full focus:outline-none"
+                value={startingAddress}
+                className="w-full focus:outline-none bg-lightgray"
                 readOnly
               />
             </div>
-            <div
-              style={{ backgroundColor: 'white' }}
-              className="flex items-center border border-green-500 rounded-lg p-3"
-            >
+            <div className="flex items-center border border-green-500 rounded-lg p-3">
               <i className="fas fa-map-marker-alt text-green-500 mr-2"></i>
               <input
                 type="text"
-                value={destination || ''}
                 placeholder="Destination"
-                className="w-full focus:outline-none"
+                value={destination}
+                className="w-full focus:outline-none bg-lightgray"
                 readOnly
               />
             </div>
           </div>
-
           <hr className="py-4 hrstyle" />
 
           <div className="space-y-1">
@@ -111,13 +102,15 @@ const FindRoute = () => {
             ))}
           </div>
         </div>
-
         <div className="md:w-2/3">
-          <GoogleMapView busStopsList={[]} />
+          <GoogleMapView
+            startingLocation={userLocation}
+            destinationLocation={destinationLocation}
+          />
         </div>
       </div>
     </>
-  )
+  );
 };
 
 export default FindRoute;
