@@ -1,16 +1,41 @@
-import React, { createContext, useContext, useState } from 'react';
+// context/AuthContext.js
 
-const AuthContext = createContext();
+'use client'
 
-export const AuthProvider = ({ children }) => {
-  const [isSignedIn, setIsSignedIn] = useState(false);
+import { createContext, useContext, useState, useEffect } from 'react'
+
+const AuthContext = createContext()
+
+export function useAuth() {
+  return useContext(AuthContext)
+}
+
+export function AuthProvider({ children }) {
+  const [isSignedIn, setIsSignedIn] = useState(false)
+
+  useEffect(() => {
+    // Check if the user is signed in, e.g., from localStorage or a session
+    const token = localStorage.getItem('token')
+    if (token) {
+      setIsSignedIn(true)
+    } else {
+      setIsSignedIn(false)
+    }
+  }, [])
+
+  const login = (token) => {
+    localStorage.setItem('token', token)
+    setIsSignedIn(true)
+  }
+
+  const logout = () => {
+    localStorage.removeItem('token')
+    setIsSignedIn(false)
+  }
 
   return (
-    <AuthContext.Provider value={{ isSignedIn, setIsSignedIn }}>
+    <AuthContext.Provider value={{ isSignedIn, setIsSignedIn, login, logout }}>
       {children}
     </AuthContext.Provider>
-  );
-};
-
-
-export const useAuth = () => useContext(AuthContext);
+  )
+}
