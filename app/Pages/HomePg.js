@@ -13,7 +13,7 @@ import { useRouter } from 'next/navigation';
 import { fetchReviews } from '../api/ReviewService'; 
 
 export default function HomePage() {
-  const { userLocation, setUserLocation } = useContext(UserLocationContext);
+  const { userLocation } = useContext(UserLocationContext)
   const [busStopsList, setBusStopsList] = useState([]);
   const [reviews, setReviews] = useState([]);  
   const [error, setError] = useState(null);  
@@ -21,34 +21,24 @@ export default function HomePage() {
   const router = useRouter();  
 
   useEffect(() => {
-    if (userLocation && userLocation.lat && userLocation.lng) {
-      getGooglePlaceBusStops();
-    }
+     if(userLocation?.lat && userLocation?.lng) {
+      getGooglePlaceBusStops()
+     }
 
      fetchReviews()
-      .then((reviews) => {
-        setReviews(reviews); 
-      })
-      .catch((error) => {
-        setError("Failed to fetch reviews");
-      });
+      .then((fetchedReviews) => setReviews(fetchedReviews))
+      .catch(() => setError("Failed to fetch reviews"));
 
   }, [userLocation]);
 
   const getGooglePlaceBusStops = () => {
     GlobalApi.getGooglePlaceBusStops(userLocation.lat, userLocation.lng)
-      .then((resp) => {
-        setBusStopsList(resp.data.data.results);
-      })
-      .catch((error) => {
-        console.error('Failed to fetch bus stops:', error);
-      });
+      .then((resp) => setBusStopsList(resp.data.data.results))
+      .catch((error) => console.error('Failed to fetch bus stops:', error))
   };
 
    const handleFindRouteClick = () => {
-   
       router.push(`/FindRoute?destination=${destination}`);  
-    
   };
 
   return (
@@ -56,7 +46,7 @@ export default function HomePage() {
       <div className="relative">
         <GoogleMapView busStopsList={busStopsList} />
 
-         <div className="absolute top-[calc(80%-15px)] left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-100 p-4 rounded-lg shadow-md flex items-center space-y-2 w-11/12 max-w-md md:max-w-lg lg:max-w-xl">
+        <div className="absolute top-[calc(80%-15px)] left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-100 p-4 rounded-lg shadow-md flex items-center space-y-2 w-11/12 max-w-md md:max-w-lg lg:max-w-xl">
           <InputField />
           <AnimatedButton
             text="Find Routes"
@@ -68,42 +58,33 @@ export default function HomePage() {
         </div>
       </div>
 
-       <div className="flex flex-col md:flex-row p-4 gap-3">
+      <div className="flex flex-col md:flex-row p-4 gap-3">
         <div className="md:w-1/2 space-y-2">
-          {error && <div className="text-red-500">{error}</div>} 
+          {error && <div className="text-red-500">{error}</div>}
 
-          {reviews && reviews.length > 0 ? (
+          {reviews.length > 0 ? (
             reviews.map((review) => (
               <ReviewBox
                 key={review.id}
                 title={review.title}
                 rating={review.stars}
                 start={review.route.name}
-                end={review.route.name}  
+                end={review.route.name}
                 description={review.content}
-                onReadMore={() => alert("Read More clicked!")}
+                onReadMore={() => alert('Read More clicked!')}
               />
             ))
           ) : (
-            <div>No reviews are available</div>  
+            <div>No reviews are available</div>
           )}
         </div>
 
         <div className="md:w-1/2 space-y-2">
-          <NewsBox
-            title="News box title"
-            description="This is a brief headline or description for the news box."
-          />
-          <NewsBox
-            title="News box title"
-            description="This is a brief headline or description for the news box."
-          />
-          <NewsBox
-            title="News box title"
-            description="This is a brief headline or description for the news box."
-          />
+          <NewsBox title="News box title" description="This is a brief headline or description for the news box." />
+          <NewsBox title="News box title" description="This is a brief headline or description for the news box." />
+          <NewsBox title="News box title" description="This is a brief headline or description for the news box." />
         </div>
       </div>
     </>
-  );
+  )
 }
