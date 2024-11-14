@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { UserLocationContext } from "../context/UserLocationContext";
 import GoogleMapView from "../components/GoogleMapView";
 import RouteCard from "../components/RouteCard";
-import { useRouter } from "next/navigation";  
+import { useSearchParams } from "next/navigation";  
 
 const routeData = [
   {
@@ -39,20 +39,32 @@ const routeData = [
 
 const FindRoute = () => {
   const { userLocation } = useContext(UserLocationContext);
-  const router = useRouter();
-  
-  const { destination } = router.query || {}; 
+  const searchParams = useSearchParams();
+  const routeStopsList = searchParams.get("routeStopsList");
+  const destination = searchParams.get("destination");
 
+  const [parsedRouteStops, setParsedRouteStops] = useState([]);
   // Format the user's location as a string for the starting point input
   const formattedLocation = userLocation
     ? `${userLocation.lat.toFixed(4)}, ${userLocation.lng.toFixed(4)}`
     : "";
 
   useEffect(() => {
-    if (destination) {
-      console.log("Destination:", destination); 
-    }
-  }, [destination]);
+    console.log("Destination:", destination);
+    console.log("Raw routeStopsList from query:", routeStopsList);
+    console.log("query: ", [searchParams.get("routeStopsList"), searchParams.get("destination")] )
+
+      try {
+        const decodedRouteStops = JSON.parse(decodeURIComponent(routeStopsList));
+        setParsedRouteStops(decodedRouteStops);
+      } catch (error) {
+        console.error("Failed to parse routeStopsList:", error);
+      }
+  }, [destination, routeStopsList]);
+
+  useEffect(() => {
+    console.log("Parsed Route Stops:", parsedRouteStops);
+  }, [parsedRouteStops]);
 
   return (
     <div className="flex h-screen ">
@@ -104,7 +116,7 @@ const FindRoute = () => {
       </div>
 
       <div className="md:w-2/3">
-        <GoogleMapView busStopsList={[]} />
+        <GoogleMapView busStopsList={[]} routeStopsList={parsedRouteStops} />
       </div>
     </div>
   );

@@ -17,7 +17,7 @@ export default function HomePage() {
   const [busStopsList, setBusStopsList] = useState([]);
   const [reviews, setReviews] = useState([]);  
   const [error, setError] = useState(null);  
-  const [destination, setDestination] = useState("");  
+  const [destination, setDestination] = useState("mmmmmmm");  
   const router = useRouter();  
 
   useEffect(() => {
@@ -46,8 +46,23 @@ export default function HomePage() {
   };
 
    const handleFindRouteClick = () => {
-   
-      router.push(`/FindRoute?destination=${destination}`);  
+    const exampleRouteStops = [
+      { lat: 7.138630650306481, lng: -73.12030916267051 },
+      { lat: 7.137353168103846, lng: -73.12040572219504 },
+    ];
+    const validRouteStops = exampleRouteStops.filter(
+      (stop) => stop.lat && stop.lng && typeof stop.lat === 'number' && typeof stop.lng === 'number'
+    );
+    if (validRouteStops.length < 2) {
+      console.error('Invalid routeStopsList:', validRouteStops);
+      return;
+    }
+    setDestination("Hi!!!")
+    const routeStopsListString = encodeURIComponent(JSON.stringify(validRouteStops));
+    const encodedDestination = encodeURIComponent(destination);
+    const url = `/FindRoute?routeStopsList=${routeStopsListString}&destination=${destination}`;
+    console.log('Navigating to:', url); // Debugging log
+    router.push(url);
     
   };
 
