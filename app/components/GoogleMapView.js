@@ -22,10 +22,6 @@ const GoogleMapView = ({ busStopsList, routeStopsList = [] }) => {
     libraries: ['places', 'marker'],
   })
 
-  const isValidLocation = (location) => {
-    return location && !isNaN(location.lat) && !isNaN(location.lng)
-  }
-
   const onLoadMap = async (mapInstance) => {
     setMap(mapInstance)
     try {
@@ -114,6 +110,38 @@ const GoogleMapView = ({ busStopsList, routeStopsList = [] }) => {
 
   return (
     <div className="h-screen">
+      <LoadScript 
+        googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_API_KEY}
+      >
+        <GoogleMap
+          mapContainerStyle={containerStyle}
+          center={userLocation || { lat: 0, lng: 0 }}
+          zoom={17}
+          onLoad={onLoadMap}
+          options={{ mapId: '4cfa72a33bb70a22' }}  
+        >
+          {AdvancedMarkerElement && map && (
+            <>
+              {/* User location marker */}
+              <Markers
+                map={map}
+                AdvancedMarkerElement={AdvancedMarkerElement}
+                userLocation={userLocation}
+              />
+
+              {/* Bus stop markers */}
+              {busStopsList.slice(0, 8).map((busStop, index) => (
+                <Markers
+                  key={index}
+                  map={map}
+                  AdvancedMarkerElement={AdvancedMarkerElement}
+                  busStop={busStop}
+                />
+              ))}
+            </>
+          )}
+        </GoogleMap>
+      </LoadScript>
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={isValidLocation(userLocation) ? userLocation : { lat: 0, lng: 0 }}
