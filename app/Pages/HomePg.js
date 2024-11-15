@@ -1,5 +1,3 @@
-"use client";
-
 import GoogleMapView from '../components/GoogleMapView';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import React, { useContext, useEffect, useState } from 'react';
@@ -72,7 +70,6 @@ export default function HomePage() {
                 start={review.route.name}
                 end={review.route.name}
                 description={review.content}
-                onReadMore={() => alert('Read More clicked!')}
               />
             ))
           ) : (
