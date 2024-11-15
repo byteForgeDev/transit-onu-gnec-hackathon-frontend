@@ -57,6 +57,8 @@ const FindRoute = () => {
       try {
         const decodedRouteStops = JSON.parse(decodeURIComponent(routeStopsList));
         setParsedRouteStops(decodedRouteStops);
+      console.log("Parsed Route Stops 2:", parsedRouteStops);
+
       } catch (error) {
         console.error("Failed to parse routeStopsList:", error);
       }

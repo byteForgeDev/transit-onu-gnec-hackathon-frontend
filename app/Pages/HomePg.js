@@ -17,7 +17,7 @@ export default function HomePage() {
   const [busStopsList, setBusStopsList] = useState([]);
   const [reviews, setReviews] = useState([]);  
   const [error, setError] = useState(null);  
-  const [destination, setDestination] = useState("mmmmmmm");  
+  const [destination, setDestination] = useState('mmmm');  
   const router = useRouter();  
 
   useEffect(() => {
@@ -49,6 +49,8 @@ export default function HomePage() {
     const exampleRouteStops = [
       { lat: 7.138630650306481, lng: -73.12030916267051 },
       { lat: 7.137353168103846, lng: -73.12040572219504 },
+      {lat: 7.134414945503464,lng: -73.12034134917869},
+      {lat: 7.125426758035116,lng: -73.11838870101585},
     ];
     const validRouteStops = exampleRouteStops.filter(
       (stop) => stop.lat && stop.lng && typeof stop.lat === 'number' && typeof stop.lng === 'number'
