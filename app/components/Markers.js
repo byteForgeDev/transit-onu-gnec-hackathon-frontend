@@ -14,7 +14,7 @@ function Markers({ map, AdvancedMarkerElement, busStop, userLocation }) {
       })
 
       marker.element.innerHTML = `
-        <img src="/user-location-icon.png" style="width: 50px; height: 50px;" alt="User Location Icon" />
+        <img src="http://maps.google.com/mapfiles/ms/icons/green-dot.png" style="width: 50px; height: 50px;" alt="User Location Icon" />
       `
     } else if (busStop) {
       // Create the marker for the bus stop

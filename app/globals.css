@@ -15,6 +15,16 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
+
+.bg-lightgray {
+  background-color: #f0f0f0; /* Set to your desired light gray color */
+}
+
+.text-darkgray {
+  color: #333333; /* Dark gray text */
+}
+
+
 .blur-map {
   filter: blur(5px);
   transition: filter 0.3s ease;

@@ -1,17 +1,22 @@
 'use client'
 
-import { GoogleMap, DirectionsRenderer, useLoadScript } from '@react-google-maps/api'
+import { GoogleMap, DirectionsRenderer, useLoadScript, Marker} from '@react-google-maps/api'
 import React, { useContext, useEffect, useState } from 'react'
 import { UserLocationContext } from '../context/UserLocationContext'
+// import { getStops } from '../api/google-place/route'
 import Markers from './Markers'
 
-const GoogleMapView = ({ busStopsList, routeStopsList = [] }) => {
-  console.log(busStopsList);
+const GoogleMapView = ({
+  destinationLocation,
+  busStopsList,
+  routeStopsList = [],
+}) => {
   const { userLocation, setUserLocation } = useContext(UserLocationContext)
   const [map, setMap] = useState(null)
   const [AdvancedMarkerElement, setAdvancedMarkerElement] = useState(null)
   const [clickedLocation, setClickedLocation] = useState(null)
   const [directions, setDirections] = useState(null)
+  const [directionsResponse, setDirectionsResponse] = useState([])
 
   const containerStyle = {
     width: '100%',
@@ -32,6 +37,53 @@ const GoogleMapView = ({ busStopsList, routeStopsList = [] }) => {
       console.error('Error loading AdvancedMarkerElement library:', error)
     }
   }
+
+  const calculateRoute = () => {
+    if (userLocation && destinationLocation) {
+      const directionsService = new google.maps.DirectionsService()
+
+      const request = {
+        origin: userLocation,
+        destination: destinationLocation,
+        travelMode: google.maps.TravelMode.DRIVING,
+        provideRouteAlternatives: true,
+      }
+
+      directionsService.route(request, (result, status) => {
+        if (status === google.maps.DirectionsStatus.OK) {
+          setDirectionsResponse(result.routes)
+        } else {
+          console.error('Directions request failed due to ', status)
+        }
+      })
+    }
+  }
+
+  useEffect(() => {
+    if (userLocation && destinationLocation) {
+      calculateRoute()
+      // Fetch bus stops near the user's current location
+      // const fetchBusStops = async () => {
+      //   try {
+      //     const stops = await getStops(userLocation.lat, userLocation.lng)
+      //     setLocalBusStopsList(stops)
+      //   } catch (error) {
+      //     console.error('Error fetching bus stops:', error)
+      //   }
+      // }
+      // fetchBusStops()
+    }
+  }, [userLocation, destinationLocation])
+
+  useEffect(() => {
+    if (userLocation && destinationLocation && map) {
+      // Ihis will Adjust map bounds to show both the user location and destination location
+      const bounds = new google.maps.LatLngBounds()
+      bounds.extend(userLocation)
+      bounds.extend(destinationLocation)
+      map.fitBounds(bounds)
+    }
+  }, [userLocation, destinationLocation, map])
 
   const handleMapClick = (event) => {
     const lat = event.latLng.lat()
@@ -121,9 +173,33 @@ const GoogleMapView = ({ busStopsList, routeStopsList = [] }) => {
       >
         {AdvancedMarkerElement && map && (
           <>
+            {/* Primera opción: Si hay `routeStopsList` con más de un elemento y hay `directions` */}
             {routeStopsList.length > 1 && directions ? (
               <DirectionsRenderer directions={directions} />
+            ) : destinationLocation ? (
+              // Tercera opción: Si hay `userLocation` y `destinationLocation`, renderizar marcadores personalizados
+              <>
+                {userLocation && (
+                  <Marker
+                    position={userLocation}
+                    title="Your Location"
+                    icon={{
+                      url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png', // Marcador verde para la ubicación del usuario
+                    }}
+                  />
+                )}
+                {destinationLocation && (
+                  <Marker
+                    position={destinationLocation}
+                    title="Destination Location"
+                    icon={{
+                      url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png', // Marcador rojo para el destino
+                    }}
+                  />
+                )}
+              </>
             ) : (
+              // Segunda opción: Renderizar marcadores para paradas de autobús y ubicación del usuario
               <>
                 <Markers
                   map={map}
@@ -140,6 +216,23 @@ const GoogleMapView = ({ busStopsList, routeStopsList = [] }) => {
                 ))}
               </>
             )}
+
+            {/* Renderizar rutas con colores diferentes si hay `directionsResponse` */}
+            {directionsResponse.length > 0 &&
+              directionsResponse.map((route, index) => (
+                <DirectionsRenderer
+                  key={index}
+                  directions={{ routes: [route] }}
+                  options={{
+                    polylineOptions: {
+                      strokeColor: `hsl(${
+                        (index * 360) / directionsResponse.length
+                      }, 100%, 50%)`, // Colores distintos para cada ruta
+                      strokeWeight: 5,
+                    },
+                  }}
+                />
+              ))}
           </>
         )}
       </GoogleMap>
