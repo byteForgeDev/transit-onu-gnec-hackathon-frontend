@@ -13,7 +13,7 @@ import { useAuth } from '../../context/AuthContext'
 const Login = () => {
   const[username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [error, setError] = useState(false);
   const router = useRouter();
   const { login } = useAuth();
 
@@ -28,7 +28,7 @@ const Login = () => {
       // Redirect to /home after successful login
       router.push('/home')
     } catch (error) {
-      setError('Failed to login. Please check your credentials.')
+      setError(true)
       console.error('Login error:', error)
     }
   }
@@ -63,9 +63,14 @@ const Login = () => {
                   type="text"
                   id="username"
                   value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  onChange={(e) => {
+                    setUsername(e.target.value)
+                    setError(false)
+                  }}
                   placeholder="Enter username"
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primaryMain"
+                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                    error ? 'border-red-500 focus:ring-red-500' : 'focus:ring-primaryMain'
+                  }`}
                   required
                 />
               </div>
@@ -80,9 +85,14 @@ const Login = () => {
                   type="password"
                   id="password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value)
+                    setError(false)
+                  }}
                   placeholder="Enter 6 characters or more"
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primaryMain"
+                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                    error ? 'border-red-500 focus:ring-red-500' : 'focus:ring-primaryMain'
+                  }`}
                   required
                 />
               </div>
@@ -110,6 +120,11 @@ const Login = () => {
                 Login
               </button>
             </form>
+            {error && (
+              <p className="mt-4 text-red-500 text-sm">
+                Failed to login. Please check your credentials.
+              </p>
+            )}
 
             <div className="mt-6 flex justify-center">
               <button className="w-full bg-white border border-primaryMain text-primaryMain py-2 rounded-lg hover:bg-blue-100 flex items-center justify-center">
