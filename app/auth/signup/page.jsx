@@ -44,7 +44,7 @@ const Signup = () => {
         countryName.label
       )
       setIsSignedIn(true)
-      router.push('/')
+      router.push('/home')
     } catch (error) {
       setError('Registration failed. Please try again.')
       console.error('Signup error:', error)

@@ -19,7 +19,8 @@
     "react-icons": "^5.3.0",
     "react-router-dom": "^6.27.0",
     "react-select": "^5.8.2",
-    "react-select-country-list": "^2.2.3"
+    "react-select-country-list": "^2.2.3",
+    "transit-onu-gnec-hackathon-frontend": "file:"
   },
   "devDependencies": {
     "postcss": "^8",
