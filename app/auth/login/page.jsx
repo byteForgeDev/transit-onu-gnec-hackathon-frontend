@@ -33,13 +33,12 @@ const Login = () => {
     }
   }
 
-
   return (
     <div>
       <Navbar />
-      <div className="flex justify-center items-center h-screen bg-background">
-        <div className="flex flex-col lg:flex-row items-center bg-white p-6 rounded-lg shadow-lg max-w-2xl">
-          <div className="w-full lg:w-full p-6">
+      <div className="flex justify-center items-center h-screen bg-background px-4 sm:px-6 md:px-8">
+        <div className="flex flex-col lg:flex-row items-center bg-white p-6 rounded-lg shadow-lg max-w-4xl w-full">
+           <div className="w-full lg:w-1/2 p-6">
             <h2 className="text-2xl font-semibold text-primaryMain mb-6">
               Login
             </h2>
@@ -120,11 +119,12 @@ const Login = () => {
             </div>
           </div>
 
-          <div className="hidden lg:block lg:w-full p-4">
+          {/* Right Side (Image Section) */}
+          <div className="hidden lg:block lg:w-1/2 p-4">
             <Image
               src="/login-illustration.png"
               alt="Login Illustration"
-              className="w-full rounded-lg"
+              className="w-full h-auto rounded-lg"
               width={9000}
               height={1000}
             />

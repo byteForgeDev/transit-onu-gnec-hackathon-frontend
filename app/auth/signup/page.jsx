@@ -54,9 +54,10 @@ const Signup = () => {
   return (
     <div>
       <Navbar />
-      <div className="flex justify-center items-center h-screen bg-background pt-20">
-        <div className="flex flex-col lg:flex-row items-center bg-white p-6 rounded-lg shadow-lg max-w-2xl">
-          <div className="w-full lg:w-full p-6">
+      <div className="flex justify-center items-center min-h-screen bg-background pt-4 px-4 sm:px-8 md:px-16">
+        <div className="flex flex-col lg:flex-row items-center bg-white p-6 rounded-lg shadow-lg w-full max-w-3xl">
+          {/* Form Section */}
+          <div className="w-full lg:w-1/2 p-6">
             <h2 className="text-2xl font-semibold text-primaryMain mb-6">
               Sign Up
             </h2>
@@ -67,61 +68,43 @@ const Signup = () => {
               </Link>
             </p>
             <form onSubmit={handleSignup} className="space-y-4">
-              <div>
-                <label
-                  htmlFor="username"
-                  className="block text-sm text-gray-700"
-                >
-                  Username
-                </label>
+              <div> 
                 <input
                   type="text"
                   id="username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  placeholder="Choose a username"
+                  placeholder="username"
                   className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primaryMain"
                   required
                 />
               </div>
               <div>
-                <label htmlFor="email" className="block text-sm text-gray-700">
-                  Email Address
-                </label>
+              
                 <input
                   type="email"
                   id="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@example.com"
+                  placeholder="mail@example.com"
                   className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primaryMain"
                   required
                 />
               </div>
               <div>
-                <label
-                  htmlFor="password"
-                  className="block text-sm text-gray-700"
-                >
-                  Password
-                </label>
+               
                 <input
                   type="password"
                   id="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter 6 characters or more"
+                  placeholder="Enter Password of 6 characters or more"
                   className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primaryMain"
                   required
                 />
               </div>
               <div>
-                <label
-                  htmlFor="confirmPassword"
-                  className="block text-sm text-gray-700"
-                >
-                  Confirm Password
-                </label>
+               
                 <input
                   type="password"
                   id="confirmPassword"
@@ -133,12 +116,7 @@ const Signup = () => {
                 />
               </div>
               <div>
-                <label
-                  htmlFor="countryName"
-                  className="block text-sm text-gray-700"
-                >
-                  Country
-                </label>
+              
                 <Select
                   options={options}
                   value={countryName}
@@ -175,18 +153,13 @@ const Signup = () => {
                 />
               </div>
               <div>
-                <label
-                  htmlFor="cityName"
-                  className="block text-sm text-gray-700"
-                >
-                  City
-                </label>
+               
                 <input
                   type="text"
                   id="cityName"
                   value={cityName}
                   onChange={(e) => setCity(e.target.value)}
-                  placeholder="Enter your city"
+                  placeholder="City"
                   className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primaryMain"
                 />
               </div>
@@ -206,7 +179,8 @@ const Signup = () => {
             </div>
           </div>
 
-          <div className="hidden lg:block lg:w-full p-4">
+          {/* Illustration Section ( It will be Hidden on small screens) */}
+          <div className="hidden lg:block lg:w-1/2 p-4">
             <Image
               src="/signup-illustration.png"
               alt="SignUp Illustration"

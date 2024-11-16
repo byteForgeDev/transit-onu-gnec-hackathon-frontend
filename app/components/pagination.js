@@ -5,8 +5,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
 
   return (
     <div className="flex justify-center items-center space-x-2 mt-4">
-      {/* Left Arrow Button */}
-      <button
+       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
         className="p-2 rounded-full bg-gray-300 hover:bg-gray-400 disabled:opacity-50"
@@ -14,8 +13,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
         <i className="fa fa-chevron-left"></i>
       </button>
 
-      {/* Page Numbers */}
-      {pageNumbers.map((page) => (
+       {pageNumbers.map((page) => (
         <button
           key={page}
           onClick={() => onPageChange(page)}
@@ -25,8 +23,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
         </button>
       ))}
 
-      {/* Right Arrow Button */}
-      <button
+       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
         className="p-2 rounded-full bg-gray-300 hover:bg-gray-400 disabled:opacity-50"
