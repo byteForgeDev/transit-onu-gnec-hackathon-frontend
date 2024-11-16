@@ -3,7 +3,7 @@
 import '@fortawesome/fontawesome-free/css/all.min.css'
 import React from 'react'
 import Navbar from '../components/navbar'  
-import HomePage from '../pages/HomePg'
+import HomePage from '../Pages/HomePg'
 import ProtectedRoute from '../components/ProtectedRoute' 
 
 export default function Home() {
