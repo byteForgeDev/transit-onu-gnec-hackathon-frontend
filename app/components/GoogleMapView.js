@@ -5,6 +5,8 @@ import React, { useContext, useEffect, useState } from 'react'
 import { UserLocationContext } from '../context/UserLocationContext'
 // import { getStops } from '../api/google-place/route'
 import Markers from './Markers'
+// import { calculateOptimizedRoute } from '../utils/mapUtils'; // Import utilities
+
 
 const GoogleMapView = ({
   destinationLocation,

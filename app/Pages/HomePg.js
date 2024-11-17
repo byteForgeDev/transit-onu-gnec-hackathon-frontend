@@ -43,6 +43,18 @@ export default function HomePage() {
 
   const handleFindRouteClick = () => {
     const formattedDestination = destination.replace(/\s+/g, '-');
+    // const exampleRouteStops = [
+    //   {    "lat": 7.138630650306481,    "lng": -73.12030916267051},
+    //   {    "lat": 7.137353168103846,    "lng": -73.12040572219504},
+    //   {    "lat": 7.134414945503464,    "lng": -73.12034134917869},
+    //   {    "lat": 7.125426758035116,    "lng": -73.11838870101585},
+    //   {    "lat": 7.1073745508056625,    "lng": -73.11415426396884},
+    //   {    "lat": 7.102557448785846,    "lng": -73.11115951968672},
+    //   {    "lat": 7.085780367561053,    "lng": -73.1079185826894},
+    //   {    "lat": 7.071544919330213,    "lng": -73.1060893793183},
+    //   {    "lat": 7.060699223994249,    "lng": -73.09147634303929}
+    
+    // ];
     const exampleRouteStops = [];
     const validRouteStops = exampleRouteStops.filter(
       (stop) => stop.lat && stop.lng && typeof stop.lat === 'number' && typeof stop.lng === 'number'
