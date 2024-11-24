@@ -1,86 +1,105 @@
-// import axios from 'axios'
+import axios from 'axios';
 import { NextResponse } from 'next/server';
 
-// const API_STOP_URL = `http://${process.env.REACT_APP_IP_PUBLIC}:8080/api/stops`;
 const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
 const BASE_URL = 'https://maps.googleapis.com/maps/api/place';
+const API_COORDINATES_TO_ADDRESS_URL = `http://${process.env.NEXT_PUBLIC_IP_PUBLIC}:8080/api/maps/coordinates`;
+const API_ADDRESS_TO_COORDINATES_URL = `http://${process.env.NEXT_PUBLIC_IP_PUBLIC}:8080/api/maps/address`;
 
-// export const getStops = async () => {
-//   try {
-//     const response = await axios.get(API_STOP_URL, {
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//       },
-//     })
+const getToken = () => {
+  if (typeof window !== 'undefined') {
+    return localStorage.getItem('token');
+  }
+  return null;
+};
 
-//     return response.data
-//   } catch (error) {
-//     console.error('Error fetching stops', error)
-//     throw error
-//   }
-// }
-
+// Main GET handler
 export async function GET(request) {
-  const { searchParams } = new URL(request.url)
-  const lat = searchParams.get('lat')
-  const lng = searchParams.get('lng')
-  const radius = searchParams.get('radius') || '100'
+
+
+  const { searchParams } = new URL(request.url);
+  const lat = searchParams.get('lat');
+  const lng = searchParams.get('lng');
+  const radius = searchParams.get('radius') || '100';
+  const token = request.headers.get('Authorization')?.replace('Bearer ', ''); // Extract the token from headers
+
+  if (!token) {
+    return NextResponse.json(
+      { error: 'Authorization token is missing' },
+      { status: 401 }
+    );
+  }
 
   try {
-     const res = await fetch(
+    // Fetch bus stops from Google Places API
+    const res = await fetch(
       `${BASE_URL}/textsearch/json?query=bus stop&location=${lat},${lng}&radius=${radius}&key=${GOOGLE_API_KEY}`,
       {
         headers: {
           'Content-Type': 'application/json',
         },
       }
-    )
+    );
 
-    const data = await res.json()
-    const userAddress = await getAddressFromCoordinates(lat, lng);
-    console.log("--------------")
-    console.log(userAddress)
-    return NextResponse.json({ data })
+    const data = await res.json();
+
+
+    // Fetch user address
+    const userAddress = await getAddressFromCoordinates(lat, lng, token);
+
+
+    return NextResponse.json({ data, userAddress });
   } catch (error) {
-    console.error('Error fetching bus stops:', error)
+    console.error('Error fetching bus stops:', error);
     return NextResponse.json(
       { error: 'Failed to fetch bus stops' },
       { status: 500 }
-    )
+    );
   }
 }
 
-export const getAddressFromCoordinates = async (lat, lng) => {
+// Helper function to get address from coordinates
+export const getAddressFromCoordinates = async (lat, lng, token) =>{
   try {
-    const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_API_KEY}`);
-    const data = await response.json();
-    
-    if (data.status === 'OK' && data.results[0]) {
-      return data.results[0].formatted_address;
-    } else {
-      console.error("Geocoding API error:", data.status);
-      return "Address not found";
-    }
+    const response = await axios.post(
+      API_COORDINATES_TO_ADDRESS_URL,
+      { lat, lng },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`, // Pass the token in headers
+        },
+      }
+    );
+
+    return response.data;
   } catch (error) {
-    console.error("Error fetching address:", error);
-    return "Address not found";
+    console.error('Error fetching address from coordinates:', error);
+    throw error;
   }
-};
+}
 
 export const getCoordinatesFromAddress = async (address) => {
   try {
-    const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${GOOGLE_API_KEY}`);
-    const data = await response.json();
-    
-    if (data.status === 'OK' && data.results[0]) {
-      const location = data.results[0].geometry.location;
-      return { lat: location.lat, lng: location.lng };
-    } else {
-      console.error("Geocoding API error:", data.status);
-      return null;
+    const token = getToken();
+
+    if (!token) {
+      throw new Error('No token found in localStorage');
     }
+    const response = await axios.post(
+      API_ADDRESS_TO_COORDINATES_URL,
+      { address },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`, // Pass the token in headers
+        },
+      }
+    );
+
+    return response.data;
   } catch (error) {
-    console.error("Error fetching coordinates:", error);
-    return null;
+    console.error('Error fetching address from coordinates:', error);
+    throw error;
   }
 };

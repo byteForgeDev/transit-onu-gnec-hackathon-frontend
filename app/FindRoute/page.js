@@ -39,6 +39,15 @@ const routeData = [
   },
 ];
 
+// Helper to retrieve the token from localStorage
+const getToken = () => {
+  if (typeof window !== 'undefined') {
+    return localStorage.getItem('token');
+  }
+  return null;
+};
+
+
 const FindRoute = () => {
   const { userLocation } = useContext(UserLocationContext);
   const searchParams = useSearchParams();
@@ -52,7 +61,12 @@ const FindRoute = () => {
     // Fetch starting address based on user's current location
     if (userLocation?.lat && userLocation?.lng) {
       const fetchAddress = async () => {
-        const address = await getAddressFromCoordinates(userLocation.lat, userLocation.lng);
+        const token = getToken();
+
+        if (!token) {
+          throw new Error('No token found in localStorage');
+        }
+        const address = await getAddressFromCoordinates(userLocation.lat, userLocation.lng, token);
         setStartingAddress(address || "Address not found");
       };
       fetchAddress();
